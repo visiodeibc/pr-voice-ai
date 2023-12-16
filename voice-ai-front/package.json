@@ -1,29 +1,30 @@
 {
-  "name": "voice-ai-front",
-  "version": "0.1.0",
+  "name": "material-ui-nextjs-ts",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
   },
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
-    "@mui/icons-material": "^5.15.0",
-    "@mui/lab": "5.0.0-alpha.156",
-    "@mui/material": "^5.15.0",
-    "@mui/styles": "^5.15.0",
-    "next": "14.0.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@emotion/cache": "latest",
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/icons-material": "latest",
+    "@mui/material": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
   },
   "devDependencies": {
-    "@types/node": "^20.10.4",
-    "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.18",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "14.0.4",
-    "typescript": "^5.3.3"
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "typescript": "latest"
   }
 }
