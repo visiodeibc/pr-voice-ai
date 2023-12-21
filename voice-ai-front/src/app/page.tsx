@@ -11,6 +11,13 @@ export default function HomePage() {
         null
     )
 
+    const play = () => {
+        //TODO blob을 set하는게 아니라 url으로 프로세스 한거를 set하는 방향으로 수정?
+        const audioURL = URL.createObjectURL(audioFile!)
+        const audio = new Audio(audioURL)
+        audio.play()
+    }
+
     const handleClick = async () => {
         if (!recording) {
             if (
@@ -40,9 +47,6 @@ export default function HomePage() {
                 })
                 setAudioFile(blob)
                 chunks = []
-                const audioURL = URL.createObjectURL(blob)
-                const audio = new Audio(audioURL)
-                audio.play()
             }
             newMediaRecorder.start()
             setMediaRecorder(newMediaRecorder)
@@ -65,14 +69,30 @@ export default function HomePage() {
                 minHeight: '40vh',
             }}
         >
-            <Button
-                variant="contained"
-                sx={{ borderRadius: '14px', height: '40px' }}
-                color={recording ? 'error' : 'primary'}
-                onClick={handleClick}
+            <Box
+                sx={{
+                    display: 'grid',
+                    gap: 3,
+                    gridTemplateRows: 'repeat(3, 1fr)',
+                }}
             >
-                Record
-            </Button>
+                <Button
+                    variant="contained"
+                    sx={{ borderRadius: '14px', height: '40px' }}
+                    color={recording ? 'error' : 'primary'}
+                    onClick={handleClick}
+                >
+                    Record
+                </Button>
+                <Button
+                    variant="contained"
+                    sx={{ borderRadius: '14px', height: '40px' }}
+                    color={'secondary'}
+                    onClick={play}
+                >
+                    Play
+                </Button>
+            </Box>
         </Box>
     )
 }
