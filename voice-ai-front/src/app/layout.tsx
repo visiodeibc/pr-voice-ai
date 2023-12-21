@@ -12,8 +12,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import DashboardIcon from '@mui/icons-material/Dashboard'
-import HomeIcon from '@mui/icons-material/Home'
-// import StarIcon from '@mui/icons-material/Star';
+import AudiotrackIcon from '@mui/icons-material/Audiotrack' // import StarIcon from '@mui/icons-material/Star';
 // import ChecklistIcon from '@mui/icons-material/Checklist';
 import SettingsIcon from '@mui/icons-material/Settings'
 // import SupportIcon from '@mui/icons-material/Support';
@@ -28,7 +27,7 @@ export const metadata = {
 const DRAWER_WIDTH = 240
 
 const LINKS = [
-    { text: 'Home', href: '/', icon: HomeIcon },
+    { text: 'Main', href: '/', icon: AudiotrackIcon },
     // { text: 'Starred', href: '/starred', icon: StarIcon },
     // { text: 'Tasks', href: '/tasks', icon: ChecklistIcon },
 ]
@@ -58,7 +57,7 @@ export default function RootLayout({
                                 }}
                             />
                             <Typography variant="h6" color="text.primary">
-                                Next.js App Router
+                                AI Audio App by visiodeibc
                             </Typography>
                         </Toolbar>
                     </AppBar>
