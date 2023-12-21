@@ -5,7 +5,8 @@ import { Button } from '@mui/material'
 import { useState } from 'react'
 
 export default function HomePage() {
-    const [recording, setRecording] = useState(false)
+    const [audioFile, setAudioFile] = useState<Blob | null>(null)
+    const [recording, setRecording] = useState<boolean>(false)
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
         null
     )
@@ -37,6 +38,7 @@ export default function HomePage() {
                     size: blob.size,
                     type: blob.type,
                 })
+                setAudioFile(blob)
                 chunks = []
                 const audioURL = URL.createObjectURL(blob)
                 const audio = new Audio(audioURL)
