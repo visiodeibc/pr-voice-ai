@@ -1,11 +1,13 @@
 # pr-voice-ai
+
 voice app that uses ai to summarize, extract and search necessary information.
 
 ## Specs
+
 - Hovering plus button to record
 - Screens
   - Recording Screen
-    - record start button
+    - ✅ record start button
     - record representation / animation
     - after stop recording transcribe to text
     - after transcribing summarize the content
@@ -26,6 +28,7 @@ voice app that uses ai to summarize, extract and search necessary information.
     - sorted in accordance of importance and relevancy
 
 ## TODOs
+
 1. Create Record Feature
    1. Create record button / record
       1. While recording transcribe recording into text
