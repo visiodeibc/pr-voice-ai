@@ -100,11 +100,39 @@ export default function HomePage() {
         >
             <Box
                 sx={{
-                    display: 'grid',
+                    display: 'flex',
+                    flexDirection: 'column',
                     gap: 3,
-                    gridTemplateRows: 'repeat(3, 1fr)',
+                    justifyContent: 'space-between',
                 }}
             >
+                {audioFile && (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <div
+                            ref={waveformRef}
+                            style={{ width: '200px', marginRight: '20px' }}
+                        />
+                        <Button
+                            variant="contained"
+                            sx={{
+                                borderRadius: '14px',
+                                height: '40px',
+                            }}
+                            color={'secondary'}
+                            onClick={play}
+                            disabled={!audioFile}
+                        >
+                            Play
+                        </Button>
+                    </Box>
+                )}
                 <Button
                     variant="contained"
                     sx={{ borderRadius: '14px', height: '40px' }}
@@ -112,16 +140,6 @@ export default function HomePage() {
                     onClick={handleClick}
                 >
                     Record
-                </Button>
-                {audioFile && <div ref={waveformRef} />}
-                <Button
-                    variant="contained"
-                    sx={{ borderRadius: '14px', height: '40px' }}
-                    color={'secondary'}
-                    onClick={play}
-                    disabled={!audioFile}
-                >
-                    Play
                 </Button>
             </Box>
         </Box>
