@@ -1,10 +1,13 @@
 'use client'
 import * as React from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import { Button } from '@mui/material'
-import { useState } from 'react'
+import WaveSurfer from 'wavesurfer.js'
 
 export default function HomePage() {
+    const waveformRef = useRef(null)
+    const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | null>(null)
     const [audioFile, setAudioFile] = useState<Blob | null>(null)
     const [recording, setRecording] = useState<boolean>(false)
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
@@ -12,10 +15,7 @@ export default function HomePage() {
     )
 
     const play = () => {
-        //TODO blob을 set하는게 아니라 url으로 프로세스 한거를 set하는 방향으로 수정?
-        const audioURL = URL.createObjectURL(audioFile!)
-        const audio = new Audio(audioURL)
-        audio.play()
+        !!waveSurfer && waveSurfer.play()
     }
 
     const handleClick = async () => {
@@ -57,6 +57,33 @@ export default function HomePage() {
         }
         setRecording(!recording)
     }
+
+    useEffect(() => {
+        if (audioFile) {
+            const wavesurfer = WaveSurfer.create({
+                container: waveformRef.current || '',
+                waveColor: 'violet',
+                progressColor: 'purple',
+            })
+
+            setWaveSurfer(wavesurfer)
+
+            const audioUrl = URL.createObjectURL(audioFile)
+            if (wavesurfer) {
+                wavesurfer.load(audioUrl)
+                wavesurfer.on('ready', function () {
+                    URL.revokeObjectURL(audioUrl)
+                })
+            }
+        }
+
+        return () => {
+            if (waveSurfer) {
+                waveSurfer.destroy()
+            }
+        }
+    }, [audioFile])
+
     return (
         <Box
             sx={{
@@ -84,11 +111,13 @@ export default function HomePage() {
                 >
                     Record
                 </Button>
+                {audioFile && <div ref={waveformRef} />}
                 <Button
                     variant="contained"
                     sx={{ borderRadius: '14px', height: '40px' }}
                     color={'secondary'}
                     onClick={play}
+                    disabled={!audioFile}
                 >
                     Play
                 </Button>
