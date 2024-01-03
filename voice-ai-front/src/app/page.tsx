@@ -59,22 +59,24 @@ export default function HomePage() {
     }
 
     useEffect(() => {
+        if (waveSurfer) {
+            waveSurfer.destroy()
+        }
         if (audioFile) {
-            const wavesurfer = WaveSurfer.create({
+            const wave = WaveSurfer.create({
                 container: waveformRef.current || '',
                 waveColor: 'violet',
                 progressColor: 'purple',
             })
-
-            setWaveSurfer(wavesurfer)
-
+            console.log(waveformRef.current)
             const audioUrl = URL.createObjectURL(audioFile)
-            if (wavesurfer) {
-                wavesurfer.load(audioUrl)
-                wavesurfer.on('ready', function () {
+            if (wave) {
+                wave.load(audioUrl)
+                wave.on('ready', function () {
                     URL.revokeObjectURL(audioUrl)
                 })
             }
+            setWaveSurfer(wave)
         }
 
         return () => {
