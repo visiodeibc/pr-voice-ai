@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import { Button } from '@mui/material'
 import WaveSurfer from 'wavesurfer.js'
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 
 export default function HomePage() {
     const waveformRef = useRef(null)
@@ -129,7 +130,7 @@ export default function HomePage() {
                             onClick={play}
                             disabled={!audioFile}
                         >
-                            Play
+                            <PlayArrowIcon />
                         </Button>
                     </Box>
                 )}
@@ -139,7 +140,7 @@ export default function HomePage() {
                     color={recording ? 'error' : 'primary'}
                     onClick={handleClick}
                 >
-                    Record
+                    {recording ? 'Stop' : 'Record'}
                 </Button>
             </Box>
         </Box>
