@@ -176,8 +176,9 @@ export default function HomePage() {
                     label="transcribed text"
                     multiline
                     rows={4}
-                    defaultValue="Record something..."
-                    disabled
+                    value={'TODO'}
+                    variant="filled"
+                    aria-readonly
                 />
             </Box>
         </>
