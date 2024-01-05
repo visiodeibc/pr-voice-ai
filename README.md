@@ -7,7 +7,7 @@ voice app that uses ai to summarize, extract and search necessary information.
 - Hovering plus button to record
 - Screens
   - Recording Screen
-    - ✅ record start button
+    - record start button
     - record representation / animation
     - after stop recording transcribe to text
     - after transcribing summarize the content
@@ -31,8 +31,10 @@ voice app that uses ai to summarize, extract and search necessary information.
 
 1. Create Record Feature
    1. Create record button / record
-      1. While recording transcribe recording into text
-      2. When pressed save/send file to server
+      1. ~~While recording transcribe recording into text~~ -> after finishing it process
+      2. ✅ create audio wave and play button
+      3. ✅ create text field for transcrption
+      4. When pressed save/send audio file to transcribe -> [using azure speech to text api](https://speech.microsoft.com/portal?tenantid=46e6417b-2f4f-4253-8c9b-490614c78bb9)
    2. When file is received run summary prompt
    3. Write summary propmt to the screen
 
