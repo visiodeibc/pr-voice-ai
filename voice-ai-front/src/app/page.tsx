@@ -69,7 +69,6 @@ export default function HomePage() {
                 waveColor: 'violet',
                 progressColor: 'purple',
             })
-            console.log(waveformRef.current)
             const audioUrl = URL.createObjectURL(audioFile)
             if (wave) {
                 wave.load(audioUrl)
