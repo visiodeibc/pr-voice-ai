@@ -3,8 +3,10 @@ import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import { Button, TextField } from '@mui/material'
-import WaveSurfer from 'wavesurfer.js'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
+
+import WaveSurfer from 'wavesurfer.js'
+import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 
 export default function HomePage() {
     const waveformRef = useRef(null)
@@ -14,6 +16,66 @@ export default function HomePage() {
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
         null
     )
+
+    const [test, setTest] = useState<File | null>(null)
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        if (!file) {
+            return
+        }
+        setTest(file)
+    }
+
+    const transcribe = async () => {
+        if (test) {
+            const speechConfig = sdk.SpeechConfig.fromSubscription(
+                '0b5365b325b04b50949a4f7d0ddfb846',
+                'southeastasia'
+            )
+            speechConfig.speechRecognitionLanguage = 'en-US'
+
+            const audioConfig = sdk.AudioConfig.fromWavFileInput(test)
+            const speechRecognizer = new sdk.SpeechRecognizer(
+                speechConfig,
+                audioConfig
+            )
+            await speechRecognizer.recognizeOnceAsync((result) => {
+                switch (result.reason) {
+                    case sdk.ResultReason.RecognizedSpeech:
+                        console.log(`RECOGNIZED: Text=${result.text}`)
+                        break
+                    case sdk.ResultReason.NoMatch:
+                        console.log('NOMATCH: Speech could not be recognized.')
+                        break
+                    case sdk.ResultReason.Canceled:
+                        const cancellation =
+                            sdk.CancellationDetails.fromResult(result)
+                        console.log(`CANCELED: Reason=${cancellation.reason}`)
+
+                        if (
+                            cancellation.reason == sdk.CancellationReason.Error
+                        ) {
+                            console.log(
+                                `CANCELED: ErrorCode=${cancellation.ErrorCode}`
+                            )
+                            console.log(
+                                `CANCELED: ErrorDetails=${cancellation.errorDetails}`
+                            )
+                            console.log(
+                                'CANCELED: Did you set the speech resource key and region values?'
+                            )
+                        }
+                        break
+                }
+                speechRecognizer.close()
+            })
+        }
+    }
+
+    useEffect(() => {
+        transcribe()
+    }, [test])
 
     const play = () => {
         !!waveSurfer && waveSurfer.play()
@@ -88,6 +150,7 @@ export default function HomePage() {
 
     return (
         <>
+            <input type="file" onChange={handleFileChange} />
             <Box
                 sx={{
                     padding: '20px',
@@ -151,6 +214,14 @@ export default function HomePage() {
                             onClick={handleClick}
                         >
                             {recording ? 'Stop' : 'Record'}
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{ borderRadius: '14px', height: '40px' }}
+                            color={'primary'}
+                            onClick={transcribe}
+                        >
+                            {'Transcribe'}
                         </Button>
                     </Box>
                 </Box>
