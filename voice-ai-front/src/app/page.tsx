@@ -19,16 +19,6 @@ export default function HomePage() {
         null
     )
 
-    const [test, setTest] = useState<File | null>(null)
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0]
-        if (!file) {
-            return
-        }
-        setTest(file)
-    }
-
     const readFileAsArrayBuffer = (file: Blob): Promise<ArrayBuffer> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader()
@@ -53,8 +43,8 @@ export default function HomePage() {
 
             const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
             const speechConfig = sdk.SpeechConfig.fromSubscription(
-                '0b5365b325b04b50949a4f7d0ddfb846',
-                'southeastasia'
+                process.env.AZURE_KEY ?? '',
+                process.env.AZURE_REGION ?? ''
             )
             speechConfig.speechRecognitionLanguage = 'en-US'
             const wav = toWav(audioBuffer)
@@ -97,10 +87,6 @@ export default function HomePage() {
             })
         }
     }
-
-    useEffect(() => {
-        transcribe()
-    }, [test])
 
     const play = () => {
         !!waveSurfer && waveSurfer.play()
@@ -171,7 +157,6 @@ export default function HomePage() {
 
     return (
         <>
-            <input type="file" onChange={handleFileChange} />
             <Box
                 sx={{
                     padding: '20px',
