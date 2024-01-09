@@ -13,6 +13,9 @@ export default function HomePage() {
     const waveformRef = useRef(null)
     const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | null>(null)
     const [audioFile, setAudioFile] = useState<Blob | null>(null)
+    const [transcription, setTranscription] = useState<string>(
+        'Record Something....'
+    )
 
     const [recording, setRecording] = useState<boolean>(false)
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
@@ -58,6 +61,7 @@ export default function HomePage() {
             await speechRecognizer.recognizeOnceAsync((result) => {
                 switch (result.reason) {
                     case sdk.ResultReason.RecognizedSpeech:
+                        setTranscription(result.text)
                         console.log(`RECOGNIZED: Text=${result.text}`)
                         break
                     case sdk.ResultReason.NoMatch:
@@ -256,7 +260,7 @@ export default function HomePage() {
                     label="transcribed text"
                     multiline
                     rows={4}
-                    value={'TODO'}
+                    value={transcription}
                     variant="filled"
                     aria-readonly
                 />
