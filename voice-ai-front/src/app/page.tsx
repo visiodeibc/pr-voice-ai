@@ -2,7 +2,7 @@
 import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
-import { Button, TextField } from '@mui/material'
+import { Button, CircularProgress, TextField } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 
 import WaveSurfer from 'wavesurfer.js'
@@ -16,6 +16,7 @@ export default function HomePage() {
     const [transcription, setTranscription] = useState<string>(
         'Record Something....'
     )
+    const [transcribing, setTranscribing] = useState<boolean>(false)
 
     const [recording, setRecording] = useState<boolean>(false)
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
@@ -41,6 +42,7 @@ export default function HomePage() {
 
     const transcribe = async () => {
         if (audioFile) {
+            setTranscribing(true)
             const arrayBuffer = await readFileAsArrayBuffer(audioFile) //reader.result as ArrayBuffer
             const audioContext = new AudioContext()
 
@@ -82,6 +84,7 @@ export default function HomePage() {
                         }
                         break
                 }
+                setTranscribing(false)
                 speechRecognizer.close()
             })
         }
@@ -210,18 +213,6 @@ export default function HomePage() {
                                 >
                                     <PlayArrowIcon />
                                 </Button>
-                                <Button
-                                    variant="contained"
-                                    sx={{
-                                        borderRadius: '14px',
-                                        height: '40px',
-                                        marginLeft: '10px',
-                                    }}
-                                    color={'primary'}
-                                    onClick={transcribe}
-                                >
-                                    {'Transcribe'}
-                                </Button>
                             </Box>
                         )}
                         <Button
@@ -230,6 +221,13 @@ export default function HomePage() {
                             color={recording ? 'error' : 'primary'}
                             onClick={handleRecord}
                         >
+                            {recording && (
+                                <CircularProgress
+                                    color={'inherit'}
+                                    size={20}
+                                    sx={{ marginRight: '5px' }}
+                                />
+                            )}
                             {recording ? 'Stop' : 'Record'}
                         </Button>
                     </Box>
@@ -248,6 +246,29 @@ export default function HomePage() {
             >
                 <Box sx={{ fontSize: 'h6.fontSize', fontWeight: 'bold' }}>
                     Transcription
+                    {audioFile && (
+                        <Button
+                            variant="contained"
+                            sx={{
+                                borderRadius: '14px',
+                                height: '40px',
+                                marginLeft: '10px',
+                            }}
+                            color={'primary'}
+                            disabled={transcribing}
+                            onClick={transcribe}
+                        >
+                            {transcribing && (
+                                <CircularProgress
+                                    color={'inherit'}
+                                    size={20}
+                                    sx={{ marginRight: '5px' }}
+                                />
+                            )}
+
+                            {'Transcribe'}
+                        </Button>
+                    )}
                 </Box>
                 <TextField
                     sx={{ marginTop: '20px' }}
