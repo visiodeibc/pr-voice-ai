@@ -71,17 +71,12 @@ export default function HomePage() {
                         const cancellation =
                             sdk.CancellationDetails.fromResult(result)
                         console.log(`CANCELED: Reason=${cancellation.reason}`)
-
                         if (
                             cancellation.reason == sdk.CancellationReason.Error
                         ) {
                             console.log(
-                                `CANCELED: ErrorCode=${cancellation.ErrorCode}`
-                            )
-                            console.log(
-                                `CANCELED: ErrorDetails=${cancellation.errorDetails}`
-                            )
-                            console.log(
+                                `CANCELED: ErrorCode=${cancellation.ErrorCode}\n`,
+                                `CANCELED: ErrorDetails=${cancellation.errorDetails}\n`,
                                 'CANCELED: Did you set the speech resource key and region values?'
                             )
                         }
@@ -96,7 +91,7 @@ export default function HomePage() {
         !!waveSurfer && waveSurfer.play()
     }
 
-    const handl = async () => {
+    const handleRecord = async () => {
         if (!recording) {
             if (
                 !navigator.mediaDevices ||
@@ -233,7 +228,7 @@ export default function HomePage() {
                             variant="contained"
                             sx={{ borderRadius: '14px', height: '40px' }}
                             color={recording ? 'error' : 'primary'}
-                            onClick={handl}
+                            onClick={handleRecord}
                         >
                             {recording ? 'Stop' : 'Record'}
                         </Button>
