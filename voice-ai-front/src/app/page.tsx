@@ -6,12 +6,14 @@ import { Button, TextField } from '@mui/material'
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'
 
 import WaveSurfer from 'wavesurfer.js'
+import toWav from 'audiobuffer-to-wav'
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk'
 
 export default function HomePage() {
     const waveformRef = useRef(null)
     const [waveSurfer, setWaveSurfer] = useState<WaveSurfer | null>(null)
     const [audioFile, setAudioFile] = useState<Blob | null>(null)
+
     const [recording, setRecording] = useState<boolean>(false)
     const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
         null
@@ -27,15 +29,38 @@ export default function HomePage() {
         setTest(file)
     }
 
+    const readFileAsArrayBuffer = (file: Blob): Promise<ArrayBuffer> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => {
+                if (reader.result instanceof ArrayBuffer) {
+                    resolve(reader.result)
+                } else {
+                    reject(new Error('Failed to read file as ArrayBuffer.'))
+                }
+            }
+            reader.onerror = () => {
+                reject(new Error('Error reading file as ArrayBuffer.'))
+            }
+            reader.readAsArrayBuffer(file)
+        })
+    }
+
     const transcribe = async () => {
-        if (test) {
+        if (audioFile) {
+            const arrayBuffer = await readFileAsArrayBuffer(audioFile) //reader.result as ArrayBuffer
+            const audioContext = new AudioContext()
+
+            const audioBuffer = await audioContext.decodeAudioData(arrayBuffer)
             const speechConfig = sdk.SpeechConfig.fromSubscription(
                 '0b5365b325b04b50949a4f7d0ddfb846',
                 'southeastasia'
             )
             speechConfig.speechRecognitionLanguage = 'en-US'
-
-            const audioConfig = sdk.AudioConfig.fromWavFileInput(test)
+            const wav = toWav(audioBuffer)
+            const audioConfig = sdk.AudioConfig.fromWavFileInput(
+                Buffer.from(wav)
+            )
             const speechRecognizer = new sdk.SpeechRecognizer(
                 speechConfig,
                 audioConfig
@@ -81,7 +106,7 @@ export default function HomePage() {
         !!waveSurfer && waveSurfer.play()
     }
 
-    const handleClick = async () => {
+    const handl = async () => {
         if (!recording) {
             if (
                 !navigator.mediaDevices ||
@@ -103,10 +128,6 @@ export default function HomePage() {
             newMediaRecorder.onstop = function () {
                 const blob = new Blob(chunks, {
                     type: 'audio/ogg; codecs=opus',
-                })
-                console.log('Blob properties:', {
-                    size: blob.size,
-                    type: blob.type,
                 })
                 setAudioFile(blob)
                 chunks = []
@@ -205,23 +226,27 @@ export default function HomePage() {
                                 >
                                     <PlayArrowIcon />
                                 </Button>
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        borderRadius: '14px',
+                                        height: '40px',
+                                        marginLeft: '10px',
+                                    }}
+                                    color={'primary'}
+                                    onClick={transcribe}
+                                >
+                                    {'Transcribe'}
+                                </Button>
                             </Box>
                         )}
                         <Button
                             variant="contained"
                             sx={{ borderRadius: '14px', height: '40px' }}
                             color={recording ? 'error' : 'primary'}
-                            onClick={handleClick}
+                            onClick={handl}
                         >
                             {recording ? 'Stop' : 'Record'}
-                        </Button>
-                        <Button
-                            variant="contained"
-                            sx={{ borderRadius: '14px', height: '40px' }}
-                            color={'primary'}
-                            onClick={transcribe}
-                        >
-                            {'Transcribe'}
                         </Button>
                     </Box>
                 </Box>
