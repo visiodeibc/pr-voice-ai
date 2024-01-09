@@ -96,7 +96,7 @@ export default function HomePage() {
             const newMediaRecorder = new MediaRecorder(stream)
             let chunks: BlobPart[] = []
 
-            newMediaRecorder.ondataavailable = function (e) {
+            newMediaRecorder.ondataavailable = function (e: BlobEvent) {
                 chunks.push(e.data)
             }
 

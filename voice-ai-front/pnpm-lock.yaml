@@ -20,6 +20,9 @@ dependencies:
   '@mui/material':
     specifier: latest
     version: 5.15.0(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)
+  audio-recorder-polyfill:
+    specifier: ^0.4.1
+    version: 0.4.1
   fs:
     specifier: 0.0.1-security
     version: 0.0.1-security
@@ -885,6 +888,10 @@ packages:
     dependencies:
       has-symbols: 1.0.3
     dev: true
+
+  /audio-recorder-polyfill@0.4.1:
+    resolution: {integrity: sha512-SS4qVOzuVwlS/tjQdd0uR+9cCKBTkx4jsAdjM+rMNqoTEWf6bMnBSTfv+FO4Zn9ngxviJOxhkgRWWXsAMqM96Q==}
+    dev: false
 
   /available-typed-arrays@1.0.5:
     resolution: {integrity: sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==}
